@@ -17,8 +17,7 @@ class HistoricalRetriever:
         embedding_path=None,
         model_name="sentence-transformers/all-MiniLM-L6-v2",
     ):
-        # The repository uses a flat structure, so the repository root
-        # is the directory containing this retrieval.py file.
+        # Repository root = directory containing this file.
         root = Path(__file__).resolve().parent
 
         # Historical customer/support pairs
@@ -53,6 +52,12 @@ class HistoricalRetriever:
                 "apple_support_pairs.csv must contain customer_text"
             )
 
+        # The actual CSV column is brand_response.
+        if "brand_response" not in self.df.columns:
+            raise ValueError(
+                "apple_support_pairs.csv must contain brand_response"
+            )
+
         self.embedder = SentenceTransformer(model_name)
 
         # Load precomputed embeddings when available.
@@ -78,10 +83,15 @@ class HistoricalRetriever:
 
         else:
             # Fallback: generate embeddings locally.
-            self.embeddings = self.embedder.encode(
+            texts = (
                 self.df["customer_text"]
                 .fillna("")
-                .tolist(),
+                .astype(str)
+                .tolist()
+            )
+
+            self.embeddings = self.embedder.encode(
+                texts,
                 convert_to_numpy=True,
                 show_progress_bar=True,
             )
@@ -104,38 +114,34 @@ class HistoricalRetriever:
             return "MEDIUM"
         return "WEAK"
 
-   def retrieve(self, query, top_k=3):
-    query_embedding = self.embedder.encode(
-        [str(query)],
-        convert_to_numpy=True
-    )[0]
+    def retrieve(self, query, top_k=3):
+        query_embedding = self.embedder.encode(
+            [str(query)],
+            convert_to_numpy=True,
+        )[0]
 
-    norm = np.linalg.norm(query_embedding)
+        norm = np.linalg.norm(query_embedding)
+        query_embedding = (
+            query_embedding
+            / max(norm, 1e-12)
+        )
 
-    query_embedding = (
-        query_embedding /
-        max(norm, 1e-12)
-    )
         # Because both vectors are normalized,
         # dot product is cosine similarity.
         scores = self.embeddings @ query_embedding
 
-        top_indices = np.argsort(scores)[::-1][:top_k]
+        top_k = min(top_k, len(scores))
+        indices = np.argsort(scores)[-top_k:][::-1]
 
         results = []
 
-        for idx in top_indices:
-            row = self.df.iloc[int(idx)]
+        for idx in indices:
             score = float(scores[idx])
 
             results.append(
                 {
-                    "customer_text": str(
-                        row.get("customer_text", "")
-                    ),
-                    "brand_response": str(
-                        row.get("brand_response", "")
-                    ),
+                    "customer_text": self.df.iloc[idx]["customer_text"],
+                    "brand_reply": self.df.iloc[idx]["brand_response"],
                     "score": score,
                     "strength": self._strength(score),
                 }

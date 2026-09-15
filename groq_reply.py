@@ -1,121 +1,141 @@
-
 """
-Grounded Groq reply generation.
-
-The model is instructed to use only historical AppleSupport
-responses supplied as retrieval evidence.
+Groq-powered grounded response generation for AppleSupport.
 """
 
 import os
-import re
+
 from groq import Groq
 
 
-MODEL_NAME = os.getenv(
-    "GROQ_MODEL",
-    "openai/gpt-oss-120b"
-)
-
-
 class GroqReplyGenerator:
-    def __init__(self):
+    def __init__(
+        self,
+        model="openai/gpt-oss-120b",
+        temperature=0.2,
+        max_tokens=180,
+    ):
+        self.model = model
+        self.temperature = temperature
+        self.max_tokens = max_tokens
+
         api_key = os.getenv("GROQ_API_KEY")
 
         if not api_key:
-            raise EnvironmentError(
-                "GROQ_API_KEY is not set."
+            raise ValueError(
+                "GROQ_API_KEY is not set. "
+                "Set it before running the support agent."
             )
 
-        self.client = Groq(
-            api_key=api_key
-        )
+        self.client = Groq(api_key=api_key)
 
-    @staticmethod
-    def _valid_response(text):
-        if not text:
-            return False
+    def _build_prompt(
+        self,
+        customer_message,
+        retrieval_results,
+    ):
+        examples = []
 
-        text = text.strip()
-
-        if len(text) < 20:
-            return False
-
-        # Reject obvious incomplete/truncated endings.
-        if text.endswith(
-            ("...", "and", "or", "to", "a", "an", "the")
-        ):
-            return False
-
-        return True
-
-    def generate(self, customer_message, retrieved_examples):
-        evidence = []
-
-        for i, item in enumerate(
-            retrieved_examples,
-            start=1
-        ):
-            evidence.append(
-                f"[Historical example {i}]\n"
-                f"Customer: {item['customer_text']}\n"
-                f"AppleSupport response: "
-                f"{item['brand_response']}"
+        for item in retrieval_results:
+            customer_text = str(
+                item.get("customer_text", "")
+            )
+            brand_reply = str(
+                item.get("brand_reply", "")
             )
 
-        evidence_text = "\n\n".join(evidence)
+            examples.append(
+                f"Customer: {customer_text}\n"
+                f"AppleSupport: {brand_reply}"
+            )
+
+        historical_context = "\n\n".join(examples)
 
         prompt = f"""
-You are an AppleSupport customer-support drafting assistant.
+You are an AppleSupport customer-service assistant.
 
 Customer message:
 {customer_message}
 
-Historical AppleSupport responses:
-{evidence_text}
+Historical AppleSupport examples:
+{historical_context}
 
-Write a customer-facing reply grounded ONLY in the
-historical AppleSupport responses above.
+Write a concise, polite and helpful support response.
 
-Rules:
-- Do not use outside knowledge.
-- Do not invent policies, refunds, prices, timelines,
-  guarantees, troubleshooting steps, or technical claims.
-- Do not claim that a problem is fixed or diagnosed.
-- You may ask for information when historical responses
-  support asking for that information.
-- Keep the response to 1–3 complete sentences.
-- Return only the customer-facing reply.
+Requirements:
+- Use the historical examples only as grounding evidence.
+- Do not invent Apple policies, refunds, compensation, prices,
+  timelines, guarantees, diagnoses, or unsupported technical claims.
+- Do not claim that you performed an action you cannot perform.
+- Give a practical next step when the historical evidence supports one.
+- If the evidence is insufficient, direct the customer toward
+  an appropriate official Apple support channel.
+- Keep the response concise.
 """
 
-        response = self.client.chat.completions.create(
-            model=MODEL_NAME,
-            messages=[
-                {
-                    "role": "system",
-                    "content": (
-                        "You are a strict grounded support "
-                        "response generator."
-                    ),
-                },
-                {
-                    "role": "user",
-                    "content": prompt,
-                },
-            ],
-            temperature=0,
+        return prompt.strip()
+
+    def generate(
+        self,
+        customer_message,
+        retrieval_results,
+    ):
+        prompt = self._build_prompt(
+            customer_message,
+            retrieval_results,
         )
 
-        text = (
-            response.choices[0].message.content or ""
-        ).strip()
+        try:
+            response = self.client.chat.completions.create(
+                model=self.model,
+                temperature=self.temperature,
+                max_tokens=self.max_tokens,
+                messages=[
+                    {
+                        "role": "system",
+                        "content": (
+                            "You are a careful AppleSupport assistant. "
+                            "Ground responses in the supplied historical "
+                            "evidence and avoid unsupported claims."
+                        ),
+                    },
+                    {
+                        "role": "user",
+                        "content": prompt,
+                    },
+                ],
+            )
 
-        if not self._valid_response(text):
+            reply = response.choices[0].message.content
+
+            if reply is None:
+                return {
+                    "reply": None,
+                    "valid": False,
+                    "source": "groq",
+                    "reason": "Empty Groq response.",
+                }
+
+            reply = reply.strip()
+
+            if not reply:
+                return {
+                    "reply": None,
+                    "valid": False,
+                    "source": "groq",
+                    "reason": "Empty Groq response.",
+                }
+
             return {
-                "reply": "",
-                "source": "invalid_groq_response",
+                "reply": reply,
+                "valid": True,
+                "source": "groq",
+                "reason": None,
             }
 
-        return {
-            "reply": text,
-            "source": "groq_grounded",
-        }
+        except Exception as exc:
+            return {
+                "reply": None,
+                "valid": False,
+                "source": "groq_error",
+                "reason": str(exc),
+            }

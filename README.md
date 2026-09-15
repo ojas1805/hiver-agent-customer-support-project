@@ -111,6 +111,17 @@ LLM-as-judge on the 6 valid responses:
 
 The sample is small.
 
+### Important Metric Distinction
+
+The 30% response-validity result and the 79.09% auto-handle result come from different evaluations.
+
+- Response validity was measured on a separate 20-case sample: 6/20 valid.
+- Auto-handle was measured by the escalation policy on the 110-case clean development evaluation: 87/110.
+
+Therefore, the 79.09% auto-handle rate should not be interpreted as a response-validity rate, and the 30% response-validity result should not be interpreted as the validity rate of the 110-case escalation evaluation.
+
+The response guard rejects incomplete or unsafe output instead of sending it to the customer.
+
 ## Escalation
 
 The final policy considers:
@@ -139,9 +150,9 @@ Baseline escalation:
 
 The assignment requests 150–250 hand-labeled examples.
 
-Current usable human-checked examples: 19.
+Current human-labeled examples: 100.
 
-This repository does not claim that 19 examples satisfy the requested golden-set size.
+The current 100-example set is below the original 150–250 target.
 
 ## Known Limitations
 
@@ -196,13 +207,13 @@ Detailed paired results are stored in:
 
 ## Quick Start
 
-There are two ways to use the project.
+There are two supported reproduction paths.
 
 ### Path A — Quick Demo
 
-This path uses the supplied trained artifacts and is intended for the fastest verification of the repository.
+This path uses the supplied trained artifacts and is intended for fast repository verification.
 
-1. Install dependencies:
+#### 1. Install dependencies
 
 ```bash
 pip install -r requirements.txt
