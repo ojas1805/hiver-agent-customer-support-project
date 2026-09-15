@@ -12,10 +12,10 @@ customer message
 
 from pathlib import Path
 
-from src.intents.classifier import IntentClassifier
-from src.replies.retrieval import HistoricalRetriever
-from src.replies.groq_reply import GroqReplyGenerator
-from src.escalation.policy import decide_escalation
+from classifier import IntentClassifier
+from retrieval import HistoricalRetriever
+from groq_reply import GroqReplyGenerator
+from policy import decide_escalation
 
 
 class AppleSupportAgent:

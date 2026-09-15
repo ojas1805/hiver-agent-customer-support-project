@@ -39,7 +39,7 @@ class IntentClassifier:
 
         if model_dir is None:
             model_dir = (
-                Path(__file__).resolve().parents[2]
+                Path(__file__).resolve().parent
                 / "models"
                 / "distilbert_intent_classifier"
             )
