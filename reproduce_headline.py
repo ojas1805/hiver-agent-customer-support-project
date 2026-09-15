@@ -3,12 +3,12 @@ import sys
 import pandas as pd
 from sklearn.metrics import accuracy_score, f1_score
 
-ROOT = Path(__file__).resolve().parents[2]
+ROOT = Path(__file__).resolve().parents
 
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from src.intents.classifier import IntentClassifier
+from classifier import IntentClassifier
 
 EVAL_PATH = ROOT / 'data' / 'processed' / 'clean_eval_dataset.csv'
 
