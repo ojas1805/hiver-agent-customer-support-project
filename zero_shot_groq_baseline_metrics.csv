@@ -1,0 +1,2 @@
+baseline,total_cases,successful_cases,failed_cases,accuracy,macro_f1,weighted_f1,misclassified
+zero_shot_groq,110,110,0,0.7727272727272727,0.7130190429961597,0.7778389559958107,25

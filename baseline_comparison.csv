@@ -1,0 +1,5 @@
+system,accuracy,macro_f1,weighted_f1,notes
+Majority-class trivial baseline,0.090909,0.0139,0.0152,Predicts authentication_or_code for every evaluation case.
+TF-IDF + Logistic Regression,0.906296,0.900563,0.906953,Simple lexical machine-learning baseline.
+Zero-Shot Groq,0.772727,0.713,0.7778,Required LLM baseline without historical retrieval.
+DistilBERT + rules,0.909091,0.905025,0.905025,Final intent classification system.

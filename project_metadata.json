@@ -1,0 +1,70 @@
+{
+  "project": "Hiver AI Support Agent",
+  "brand": "AppleSupport",
+  "historical_pairs": 104409,
+  "silver_examples": 3415,
+  "clean_evaluation_examples": 110,
+  "num_intents": 12,
+  "intent_classifier": {
+    "architecture": "DistilBERT",
+    "base_model": "distilbert-base-uncased",
+    "development_accuracy": 0.909091,
+    "development_macro_f1": 0.905025,
+    "development_weighted_f1": 0.905025
+  },
+  "silver_validation": {
+    "accuracy": 0.9429,
+    "macro_f1": 0.9367,
+    "weighted_f1": 0.9425
+  },
+  "tfidf_baseline": {
+    "accuracy": 0.906296,
+    "macro_f1": 0.900563,
+    "weighted_f1": 0.906953
+  },
+  "zero_shot_groq_baseline": {
+    "accuracy": 0.772727,
+    "macro_f1": 0.713,
+    "weighted_f1": 0.7778,
+    "successful_cases": 110,
+    "misclassified": 25
+  },
+  "retrieval": {
+    "model": "sentence-transformers/all-MiniLM-L6-v2",
+    "embedding_dimension": 384,
+    "historical_embeddings": 104409,
+    "top_k": 3,
+    "strong_threshold": 0.6,
+    "medium_threshold": 0.45,
+    "average_top1_similarity": 0.814557
+  },
+  "groq": {
+    "model": "openai/gpt-oss-120b"
+  },
+  "response_evaluation": {
+    "attempts": 20,
+    "valid": 6,
+    "validity": 0.3,
+    "judge_count": 6,
+    "average_groundedness": 5.0,
+    "average_helpfulness": 4.6667,
+    "average_tone": 5.0,
+    "average_safety": 5.0,
+    "average_overall": 5.0
+  },
+  "escalation": {
+    "final_auto_handle": 87,
+    "final_escalate": 23,
+    "final_auto_handle_rate": 0.790909,
+    "final_escalation_rate": 0.209091,
+    "baseline_auto_handle": 96,
+    "baseline_escalate": 14,
+    "baseline_auto_handle_rate": 0.872727,
+    "baseline_escalation_rate": 0.127273
+  },
+  "golden_set": {
+    "requested": "150-250",
+    "usable_human_checked": 19,
+    "complete": false
+  }
+}

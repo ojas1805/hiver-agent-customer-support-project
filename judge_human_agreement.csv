@@ -1,0 +1,6 @@
+dimension,n_valid,exact_agreement,mean_absolute_error,cohen_kappa,quadratic_weighted_kappa
+groundedness,6,1.0,0.0,,
+helpfulness,6,1.0,0.0,1.0,1.0
+tone,6,1.0,0.0,,
+safety,5,1.0,0.0,,
+overall,6,1.0,0.0,,

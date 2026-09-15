@@ -1,0 +1,33 @@
+[
+  {
+    "brand":"AppleSupport",
+    "historical_pairs":104409,
+    "num_intents":12,
+    "silver_training_examples":3415,
+    "distilbert_silver_accuracy":0.9429,
+    "distilbert_silver_macro_f1":0.9367,
+    "distilbert_silver_weighted_f1":0.9425,
+    "tfidf_accuracy":0.906295754,
+    "tfidf_macro_f1":0.9005629339,
+    "tfidf_weighted_f1":0.9069528414,
+    "clean_eval_examples":110,
+    "clean_intent_accuracy":0.9090909091,
+    "clean_intent_macro_f1":0.9050253688,
+    "clean_intent_weighted_f1":0.9050253688,
+    "average_top_retrieval_score":0.814557321,
+    "auto_handle_count":87,
+    "auto_handle_rate":0.7909090909,
+    "escalate_count":23,
+    "escalate_rate":0.2090909091,
+    "response_eval_attempts":20,
+    "valid_responses":6,
+    "response_validity_rate":0.3,
+    "judged_responses":6,
+    "avg_groundedness":5.0,
+    "avg_helpfulness":4.6666666667,
+    "avg_tone":5.0,
+    "avg_safety":5.0,
+    "avg_overall":5.0,
+    "intent_misclassifications":10
+  }
+]

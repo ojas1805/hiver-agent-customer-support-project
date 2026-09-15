@@ -1,0 +1,2 @@
+cases,dimensions,total_valid_ratings,exact_agreement,mean_absolute_error,cohen_kappa,quadratic_weighted_kappa
+6,5,29,1.0,0.0,1.0,1.0
