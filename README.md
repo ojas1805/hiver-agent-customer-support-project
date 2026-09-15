@@ -196,28 +196,13 @@ Detailed paired results are stored in:
 
 ## Quick Start
 
-Install dependencies:
+There are two ways to use the project.
+
+### Path A — Quick Demo
+
+This path uses the supplied trained artifacts and is intended for the fastest verification of the repository.
+
+1. Install dependencies:
 
 ```bash
 pip install -r requirements.txt
-```
-
-Set your Groq API key:
-
-```bash
-export GROQ_API_KEY='YOUR_KEY'
-```
-
-Provide the large model/data artifacts described in MODEL_ARTIFACTS.md.
-
-Run a single support request:
-
-```bash
-python demo.py
-```
-
-Reproduce the intent headline result:
-
-```bash
-python src/eval/reproduce_headline.py
-```
