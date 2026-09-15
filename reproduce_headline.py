@@ -3,14 +3,14 @@ import sys
 import pandas as pd
 from sklearn.metrics import accuracy_score, f1_score
 
-ROOT = Path(__file__).resolve().parents
+ROOT = Path(__file__).resolve().parent
 
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from classifier import IntentClassifier
 
-EVAL_PATH = ROOT / 'data' / 'processed' / 'clean_eval_dataset.csv'
+EVAL_PATH = ROOT /  'clean_eval_dataset.csv'
 
 def main():
     print('=' * 60)
