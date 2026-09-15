@@ -1,25 +1,22 @@
 # Large Model Artifacts
 
-The complete trained project contains three large artifacts:
+The GitHub source repository intentionally excludes the large trained artifacts.
 
-- models/distilbert_intent_classifier/
-- models/retrieval_embeddings.npy
-- data/processed/apple_support_pairs.csv
+The complete artifact bundle contains:
 
-These are excluded from the GitHub-friendly source package because of their size.
+- `models/distilbert_intent_classifier/`
+- `models/retrieval_embeddings.npy`
+- `data/processed/apple_support_pairs.csv`
 
-The complete archive contains them.
+These files are excluded because of their size.
 
-The DistilBERT model belongs at:
-models/distilbert_intent_classifier/
+## Quick Demo
 
-The retrieval matrix belongs at:
-models/retrieval_embeddings.npy
+For the fastest way to run the existing agent, place the supplied artifact bundle into the repository so that the paths above exist.
 
-Expected retrieval shape: (104409, 384)
+Then run:
 
-The historical pair dataset belongs at:
-data/processed/apple_support_pairs.csv
-
-Retrieval embeddings can be rebuilt with:
-python src/replies/build_index.py
+```bash
+pip install -r requirements.txt
+export GROQ_API_KEY='YOUR_KEY'
+python demo.py
