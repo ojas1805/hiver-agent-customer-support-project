@@ -67,6 +67,20 @@ Accuracy improvement over zero-shot baseline: 13.64 percentage points.
 
 Note: the clean evaluation is a semantic development evaluation, not a fully human-labeled benchmark.
 
+
+### Human-Labeled Evaluation — 150 Examples
+
+A separate end-to-end evaluation was run against 150 manually labeled examples.
+
+| Metric | Result |
+|---|---:|
+| Accuracy | 42.00% |
+| Macro F1 | 37.85% |
+| Weighted F1 | 42.38% |
+
+This evaluation is distinct from the 110-example semantic development evaluation above. The 90.91% result therefore should not be interpreted as the performance on the human-labeled benchmark.
+
+
 ## Retrieval
 
 Model: sentence-transformers/all-MiniLM-L6-v2
