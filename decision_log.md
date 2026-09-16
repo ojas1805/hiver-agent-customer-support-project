@@ -37,7 +37,7 @@ Authentication/account-related issues are escalated conservatively.
 Earlier evaluation that permitted self-retrieval was discarded. The final clean evaluation excludes silver-training customer texts and exact self matches.
 
 ## Golden set
-Only 19 usable human-checked examples were obtained. The repository explicitly does not claim completion of the requested 150–250-example requirement.
+The human-checked evaluation set was expanded to 150 examples, meeting the lower bound of the requested 150–250-example requirement.
 
 ## Optional risk checker
 A separate final Groq risk-check pass was not included. Safety currently relies on grounded prompting, output validation, and deterministic escalation.
