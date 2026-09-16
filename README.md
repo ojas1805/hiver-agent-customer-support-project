@@ -150,13 +150,13 @@ Baseline escalation:
 
 The assignment requests 150–250 hand-labeled examples.
 
-Current human-labeled examples: 100.
+Current human-labeled examples: 150.
 
-The current 100-example set is below the original 150–250 target.
+The current 150-example set meets the lower bound of the original 150–250 target.
 
 ## Known Limitations
 
-1. The golden set is below the requested 150–250 examples.
+1. The current golden set contains 150 human-labeled examples and meets the lower bound of the requested 150–250 range.
 2. The clean evaluation is semantic rather than fully human labeled.
 3. information_or_how_to has zero examples in the clean evaluation.
 4. Response validity was only 30% on the 20-case sample.
